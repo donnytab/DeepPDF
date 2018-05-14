@@ -27,7 +27,6 @@ def cnn_pdf_model(features):
     with tf.name_scope('first_pool'):
         first_pool = max_pool_n(first_conv, DOWNSAMPLE_SIZE)
 
-
     # First dense layer
     with tf.name_scope('first_dense'):
         w_dense = weight_variable([7*7*64,1024])
@@ -40,8 +39,8 @@ def cnn_pdf_model(features):
         keep_prob = tf.placeholder(tf.float32)
         dropout = tf.nn.dropout(dense, keep_prob=keep_prob)
 
-    # Second dense layer
-    with tf.name_scope('second_dense'):
+    # Logits layer
+    with tf.name_scope('logits'):
         w_dense = weight_variable([1024,10])
         b_dense = bias_variable([10])
         y_conv = tf.matmul(dropout, w_dense)+b_dense
