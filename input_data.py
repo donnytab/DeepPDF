@@ -20,10 +20,8 @@ def load_image():
         if files.find(".pdf") == -1:
             continue
         files = os.path.join(data_folder, files)
-        images = convert_from_path(str(files))
-        print("images:", images)
-        img = Image.open(images)
-        img = img.resize((PIXEL_DIMENSION_WIDTH, PIXEL_DIMENSION_HEIGHT),PIL.Image.ANTIALIAS)
+        images = convert_from_path(str(files)).pop(0)
+        img = images.resize((PIXEL_DIMENSION_WIDTH, PIXEL_DIMENSION_HEIGHT),PIL.Image.ANTIALIAS)
         print(img)
         print(list(img.getdata())[0])
         img_input.append(reshape_image(img))
