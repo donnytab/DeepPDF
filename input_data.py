@@ -4,8 +4,10 @@ import numpy as np
 from PIL import Image
 from pdf2image import convert_from_path
 
-PIXEL_DIMENSION_WIDTH = 1828
-PIXEL_DIMENSION_HEIGHT = 1306
+# PIXEL_DIMENSION_WIDTH = 1828
+# PIXEL_DIMENSION_HEIGHT = 1306
+PIXEL_DIMENSION_WIDTH = 360
+PIXEL_DIMENSION_HEIGHT = 240
 IMG_RESOURCE_PATH = os.getcwd() + "/res/"
 
 def load_image():
@@ -13,6 +15,7 @@ def load_image():
     print("Loading image data...")
 
     img_input = []
+    sample_size = 0
 
     data_folder = os.path.join(os.getcwd(), IMG_RESOURCE_PATH)
     for files in os.listdir(data_folder):
@@ -25,7 +28,8 @@ def load_image():
         print(img)
         print(list(img.getdata())[0])
         img_input.append(reshape_image(img))
-        return reshape_image(img)
+        sample_size += 1
+        return reshape_image(img), sample_size
         # print(len(reshape_image(img)))
 
     # return img_input

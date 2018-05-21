@@ -6,12 +6,15 @@ import tensorflow as tf
 import numpy as np
 import input_data
 
-PIXEL_DIMENSION_WIDTH = 1828
-PIXEL_DIMENSION_HEIGHT = 1306
+# PIXEL_DIMENSION_WIDTH = 1828
+# PIXEL_DIMENSION_HEIGHT = 1306
+PIXEL_DIMENSION_WIDTH = 360
+PIXEL_DIMENSION_HEIGHT = 240
 FIRST_CONV_LAYER_FILTERS = 32
 DOWNSAMPLE_SIZE = 2
 KERNEL_SIZE = 5
-DENSE_NEURON_NUM = 1024
+# DENSE_NEURON_NUM = 1024
+DENSE_NEURON_NUM = 240
 LOGITS_NEURON_NUM = 2   # Number of target class (tablePositive, tableNegative)
 
 def cnn_pdf_model(features):
@@ -40,7 +43,8 @@ def cnn_pdf_model(features):
         first_pool_channel = tf.cast(first_pool.get_shape()[3], tf.int32)
 
         # first_pool_width*first_pool_height*first_pool_channel
-        w_dense = weight_variable([914*653*32, DENSE_NEURON_NUM])
+        # w_dense = weight_variable([914*653*32, DENSE_NEURON_NUM])
+        w_dense = weight_variable([180 * 120 * 32, DENSE_NEURON_NUM])
         b_dense = bias_variable([DENSE_NEURON_NUM])
         pool_flat = tf.reshape(first_pool, [-1,first_pool_width*first_pool_height*first_pool_channel])
         dense = tf.nn.relu(tf.matmul(pool_flat,w_dense)+b_dense)
@@ -70,6 +74,3 @@ def weight_variable(shape):
 
 def bias_variable(shape):
     return tf.Variable(tf.constant(0.1, shape=shape))
-
-
-cnn_pdf_model(input_data.load_image())
