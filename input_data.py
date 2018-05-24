@@ -30,7 +30,7 @@ def load_image():
         print(list(img.getdata())[0])
         img_input.append(reshape_image(img))
         sample_size += 1
-        return reshape_image(img), sample_size
+    return img_input, sample_size
         # print(len(reshape_image(img)))
 
     # return img_input

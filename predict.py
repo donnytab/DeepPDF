@@ -3,13 +3,14 @@ import cnn_pdf
 import tensorflow as tf
 import numpy as np
 
-TRAINING_EPOCH = 10
+# TRAINING_EPOCH = 10
 
 if __name__ == "__main__":
     # Load pdf image into array
     img_features, sample_size = input_data.load_image()
 
     print("size: ", sample_size)
+    TRAINING_EPOCH = sample_size
 
     # labels = np.ones(sample_size)
     # TODO: 3 -> sample_size
@@ -38,7 +39,7 @@ if __name__ == "__main__":
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
         for i in range(TRAINING_EPOCH):
-            train_accuracy = accuracy.eval(feed_dict={x: img_features, y: labels, keep_prob: 1.0})
+            train_accuracy = accuracy.eval(feed_dict={x: img_features[i], y: labels, keep_prob: 1.0})
             print("train_accuracy: ", train_accuracy)
 
-            train_step.run(feed_dict={x: img_features, y: labels, keep_prob: 0.5})
+            train_step.run(feed_dict={x: img_features[i], y: labels, keep_prob: 0.5})
