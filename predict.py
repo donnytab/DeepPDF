@@ -1,18 +1,25 @@
+import os
 import input_data
 import cnn_pdf
 import tensorflow as tf
 import numpy as np
 
+TRAIN_IMG_RESOURCE_PATH = os.getcwd() + "/res/train/"
+TEST_IMG_RESOURCE_PATH = os.getcwd() + "/res/test/"
 # TRAINING_EPOCH = 10
 
 if __name__ == "__main__":
     # Load pdf image into array
-    img_features, sample_size = input_data.load_image()
+    img_features, sample_size = input_data.load_image(TRAIN_IMG_RESOURCE_PATH)
+
+    test_img_features, test_sample_size = input_data.load_image(TEST_IMG_RESOURCE_PATH)
 
     print("size: ", sample_size)
     TRAINING_EPOCH = sample_size
 
     labels = np.ones(sample_size)
+
+    test_labels = np.ones(test_sample_size)
 
     # x = tf.placeholder(tf.float32, [None, cnn_pdf.PIXEL_DIMENSION_WIDTH * cnn_pdf.PIXEL_DIMENSION_HEIGHT])
     x = tf.placeholder(tf.float32, [cnn_pdf.PIXEL_DIMENSION_WIDTH * cnn_pdf.PIXEL_DIMENSION_HEIGHT])
@@ -48,3 +55,5 @@ if __name__ == "__main__":
             print("train_accuracy: ", train_accuracy)
 
             train_step.run(feed_dict={x: img_features[i], y: _y, keep_prob: 0.5})
+
+        #print("test accuracy: ", accuracy.eval(feed_dict={x: test_img_features, y: test_labels, keep_prob: 1.0}))

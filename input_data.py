@@ -8,16 +8,15 @@ from pdf2image import convert_from_path
 # PIXEL_DIMENSION_HEIGHT = 1306
 PIXEL_DIMENSION_WIDTH = 360
 PIXEL_DIMENSION_HEIGHT = 240
-IMG_RESOURCE_PATH = os.getcwd() + "/res/"
 
-def load_image():
+def load_image(path):
 
     print("Loading image data...")
 
     img_input = []
     sample_size = 0
 
-    data_folder = os.path.join(os.getcwd(), IMG_RESOURCE_PATH)
+    data_folder = os.path.join(os.getcwd(), path)
     for files in os.listdir(data_folder):
         print("file: ", str(files))
         # PDF files not found
