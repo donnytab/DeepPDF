@@ -3,11 +3,12 @@ import PIL
 import numpy as np
 from PIL import Image
 from pdf2image import convert_from_path
+import cnn_pdf
 
 # PIXEL_DIMENSION_WIDTH = 1828
 # PIXEL_DIMENSION_HEIGHT = 1306
-PIXEL_DIMENSION_WIDTH = 360
-PIXEL_DIMENSION_HEIGHT = 240
+# PIXEL_DIMENSION_WIDTH = 360
+# PIXEL_DIMENSION_HEIGHT = 240
 
 def load_image(path):
 
@@ -25,7 +26,7 @@ def load_image(path):
         files = os.path.join(data_folder, files)
         images = convert_from_path(str(files)).pop(0)
         images = images.convert('L')
-        img = images.resize((PIXEL_DIMENSION_WIDTH, PIXEL_DIMENSION_HEIGHT),PIL.Image.ANTIALIAS)
+        img = images.resize((cnn_pdf.PIXEL_DIMENSION_WIDTH, cnn_pdf.PIXEL_DIMENSION_HEIGHT),PIL.Image.ANTIALIAS)
         print(img)
         # print(list(img.getdata()))
         img_input.append(reshape_image(img))

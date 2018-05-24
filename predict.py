@@ -19,7 +19,8 @@ if __name__ == "__main__":
 
     labels = np.ones(sample_size)
 
-    test_labels = np.ones(test_sample_size)
+    test_labels = np.concatenate((np.zeros(int(test_sample_size/2)), np.ones(int(test_sample_size/2))), axis=0)
+    print("test_labels: ", test_labels)
 
     # x = tf.placeholder(tf.float32, [None, cnn_pdf.PIXEL_DIMENSION_WIDTH * cnn_pdf.PIXEL_DIMENSION_HEIGHT])
     x = tf.placeholder(tf.float32, [cnn_pdf.PIXEL_DIMENSION_WIDTH * cnn_pdf.PIXEL_DIMENSION_HEIGHT])
@@ -56,4 +57,6 @@ if __name__ == "__main__":
 
             train_step.run(feed_dict={x: img_features[i], y: _y, keep_prob: 0.5})
 
-        #print("test accuracy: ", accuracy.eval(feed_dict={x: test_img_features, y: test_labels, keep_prob: 1.0}))
+        for j in range(test_sample_size):
+            _y = np.reshape(test_labels[j], (-1))
+            print("test accuracy: ", accuracy.eval(feed_dict={x: test_img_features[j], y: _y, keep_prob: 1.0}))
