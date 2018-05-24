@@ -19,6 +19,7 @@ def load_image():
 
     data_folder = os.path.join(os.getcwd(), IMG_RESOURCE_PATH)
     for files in os.listdir(data_folder):
+        print("file: ", str(files))
         # PDF files not found
         if files.find(".pdf") == -1:
             continue
@@ -40,6 +41,3 @@ def reshape_image(temp_image):
     reshaped = reshaped.tolist()
 
     return reshaped
-
-
-load_image()

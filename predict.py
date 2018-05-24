@@ -3,11 +3,13 @@ import cnn_pdf
 import tensorflow as tf
 import numpy as np
 
-TRAINING_EPOCH = 20
+TRAINING_EPOCH = 10
 
 if __name__ == "__main__":
     # Load pdf image into array
     img_features, sample_size = input_data.load_image()
+
+    print("size: ", sample_size)
 
     # labels = np.ones(sample_size)
     # TODO: 3 -> sample_size

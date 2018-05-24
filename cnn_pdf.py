@@ -22,7 +22,7 @@ def cnn_pdf_model(features):
     # Input layer
     with tf.name_scope('reshape'):
         pdf_input = tf.reshape(features, [-1, PIXEL_DIMENSION_WIDTH, PIXEL_DIMENSION_HEIGHT, 1])
-        print(pdf_input)
+        print("input: ", pdf_input)
 
     # First convolutional layer
     with tf.name_scope('first_conv'):
