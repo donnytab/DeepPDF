@@ -16,10 +16,12 @@ KERNEL_SIZE = 5
 # DENSE_NEURON_NUM = 1024
 DENSE_NEURON_NUM = 240
 LOGITS_NEURON_NUM = 2   # Number of target class (tablePositive, tableNegative)
+COLOR_CHANNEL = 3
 
 def cnn_pdf_model(features):
 
     # Input layer
+    # [batch_size, image_height, image_width, channels]
     with tf.name_scope('reshape'):
         pdf_input = tf.reshape(features, [-1, PIXEL_DIMENSION_WIDTH, PIXEL_DIMENSION_HEIGHT, 1])
         print("input: ", pdf_input)

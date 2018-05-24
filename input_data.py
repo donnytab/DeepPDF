@@ -25,15 +25,13 @@ def load_image():
             continue
         files = os.path.join(data_folder, files)
         images = convert_from_path(str(files)).pop(0)
+        images = images.convert('L')
         img = images.resize((PIXEL_DIMENSION_WIDTH, PIXEL_DIMENSION_HEIGHT),PIL.Image.ANTIALIAS)
         print(img)
-        print(list(img.getdata())[0])
+        # print(list(img.getdata()))
         img_input.append(reshape_image(img))
         sample_size += 1
     return img_input, sample_size
-        # print(len(reshape_image(img)))
-
-    # return img_input
 
 def reshape_image(temp_image):
     # reshaped = np.array(temp_image.getdata()).reshape(temp_image.size[0], temp_image.size[1], 1)

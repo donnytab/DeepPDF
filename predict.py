@@ -12,15 +12,17 @@ if __name__ == "__main__":
     print("size: ", sample_size)
     TRAINING_EPOCH = sample_size
 
-    # labels = np.ones(sample_size)
-    # TODO: 3 -> sample_size
-    labels = np.ones(3)
+    labels = np.ones(sample_size)
 
-    x = tf.placeholder(tf.int64, [cnn_pdf.PIXEL_DIMENSION_WIDTH * cnn_pdf.PIXEL_DIMENSION_HEIGHT, None])
-    y = tf.placeholder(tf.int64, [None])
+    # x = tf.placeholder(tf.float32, [None, cnn_pdf.PIXEL_DIMENSION_WIDTH * cnn_pdf.PIXEL_DIMENSION_HEIGHT])
+    x = tf.placeholder(tf.float32, [cnn_pdf.PIXEL_DIMENSION_WIDTH * cnn_pdf.PIXEL_DIMENSION_HEIGHT])
+    y = tf.placeholder(tf.int64, [1])
 
     # Build CNN model
     y_conv, keep_prob = cnn_pdf.cnn_pdf_model(x)
+
+    print("yconv: ", y_conv)
+    print("keep_prob: ", keep_prob)
 
     with tf.name_scope("loss"):
         cross_entropy = tf.losses.sparse_softmax_cross_entropy(labels=y, logits=y_conv)
@@ -39,7 +41,10 @@ if __name__ == "__main__":
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
         for i in range(TRAINING_EPOCH):
-            train_accuracy = accuracy.eval(feed_dict={x: img_features[i], y: labels, keep_prob: 1.0})
+            # _x = np.reshape(img_features[i], (cnn_pdf.PIXEL_DIMENSION_WIDTH * cnn_pdf.PIXEL_DIMENSION_HEIGHT, 1))
+            _y = np.reshape(labels[i], (-1))
+            train_accuracy = accuracy.eval(feed_dict={x: img_features[i], y: _y, keep_prob: 1.0})
+
             print("train_accuracy: ", train_accuracy)
 
-            train_step.run(feed_dict={x: img_features[i], y: labels, keep_prob: 0.5})
+            train_step.run(feed_dict={x: img_features[i], y: _y, keep_prob: 0.5})
