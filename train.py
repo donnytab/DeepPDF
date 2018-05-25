@@ -6,7 +6,7 @@ import numpy as np
 
 TRAIN_IMG_RESOURCE_PATH = os.getcwd() + "/res/train/"
 TEST_IMG_RESOURCE_PATH = os.getcwd() + "/res/test/"
-TRAINING_EPOCH = 100
+TRAINING_EPOCH = 200
 
 if __name__ == "__main__":
     # Load pdf image into array
@@ -48,6 +48,8 @@ if __name__ == "__main__":
 
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
+        model_saver = tf.train.Saver()
+
         for i in range(TRAINING_EPOCH):
             # _x = np.reshape(img_features[i], (cnn_pdf.PIXEL_DIMENSION_WIDTH * cnn_pdf.PIXEL_DIMENSION_HEIGHT, 1))
             # _y = np.reshape(labels[i], (-1))
@@ -55,6 +57,11 @@ if __name__ == "__main__":
 
             print("train_accuracy: ", train_accuracy)
 
+            if train_accuracy >= 0.93 and train_accuracy < 1.0 :
+                model_saver.save(sess, "./model/deepPdf-model")
+                break
+
             train_step.run(feed_dict={x: img_features, y: labels, keep_prob: 0.5})
 
+        model_saver.restore(sess, tf.train.latest_checkpoint("./model/"))
         print("test accuracy: ", accuracy.eval(feed_dict={x: test_img_features, y: test_labels, keep_prob: 1.0}))
