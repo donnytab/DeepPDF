@@ -6,7 +6,7 @@ import numpy as np
 
 TRAIN_IMG_RESOURCE_PATH = os.getcwd() + "/res/train/"
 TEST_IMG_RESOURCE_PATH = os.getcwd() + "/res/test/"
-# TRAINING_EPOCH = 10
+TRAINING_EPOCH = 100
 
 if __name__ == "__main__":
     # Load pdf image into array
@@ -15,7 +15,7 @@ if __name__ == "__main__":
     test_img_features, test_sample_size = input_data.load_image(TEST_IMG_RESOURCE_PATH)
 
     print("size: ", sample_size)
-    TRAINING_EPOCH = sample_size
+    # TRAINING_EPOCH = sample_size
 
     labels = np.ones(sample_size)
 
@@ -23,8 +23,8 @@ if __name__ == "__main__":
     print("test_labels: ", test_labels)
 
     # x = tf.placeholder(tf.float32, [None, cnn_pdf.PIXEL_DIMENSION_WIDTH * cnn_pdf.PIXEL_DIMENSION_HEIGHT])
-    x = tf.placeholder(tf.float32, [cnn_pdf.PIXEL_DIMENSION_WIDTH * cnn_pdf.PIXEL_DIMENSION_HEIGHT])
-    y = tf.placeholder(tf.int64, [1])
+    x = tf.placeholder(tf.float32, [None, cnn_pdf.PIXEL_DIMENSION_WIDTH * cnn_pdf.PIXEL_DIMENSION_HEIGHT])
+    y = tf.placeholder(tf.int64, [None])
 
     # Build CNN model
     y_conv, keep_prob = cnn_pdf.cnn_pdf_model(x)
@@ -50,13 +50,11 @@ if __name__ == "__main__":
         sess.run(tf.global_variables_initializer())
         for i in range(TRAINING_EPOCH):
             # _x = np.reshape(img_features[i], (cnn_pdf.PIXEL_DIMENSION_WIDTH * cnn_pdf.PIXEL_DIMENSION_HEIGHT, 1))
-            _y = np.reshape(labels[i], (-1))
-            train_accuracy = accuracy.eval(feed_dict={x: img_features[i], y: _y, keep_prob: 1.0})
+            # _y = np.reshape(labels[i], (-1))
+            train_accuracy = accuracy.eval(feed_dict={x: img_features, y: labels, keep_prob: 1.0})
 
             print("train_accuracy: ", train_accuracy)
 
-            train_step.run(feed_dict={x: img_features[i], y: _y, keep_prob: 0.5})
+            train_step.run(feed_dict={x: img_features, y: labels, keep_prob: 0.5})
 
-        for j in range(test_sample_size):
-            _y = np.reshape(test_labels[j], (-1))
-            print("test accuracy: ", accuracy.eval(feed_dict={x: test_img_features[j], y: _y, keep_prob: 1.0}))
+        print("test accuracy: ", accuracy.eval(feed_dict={x: test_img_features, y: test_labels, keep_prob: 1.0}))
