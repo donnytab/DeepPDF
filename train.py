@@ -57,7 +57,7 @@ if __name__ == "__main__":
 
             print("train_accuracy: ", train_accuracy)
 
-            if train_accuracy >= 0.93 and train_accuracy < 1.0 :
+            if train_accuracy >= 0.85 and train_accuracy < 1.0 :
                 model_saver.save(sess, "./model/deepPdf-model")
                 break
 

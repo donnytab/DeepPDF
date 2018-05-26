@@ -8,7 +8,7 @@ import input_data
 
 # PIXEL_DIMENSION_WIDTH = 1828
 # PIXEL_DIMENSION_HEIGHT = 1306
-PIXEL_DIMENSION_WIDTH = 270
+PIXEL_DIMENSION_WIDTH = 280
 PIXEL_DIMENSION_HEIGHT = 360
 FIRST_CONV_LAYER_FILTERS = 32
 DOWNSAMPLE_SIZE = 2
@@ -35,19 +35,29 @@ def cnn_pdf_model(features):
     with tf.name_scope('first_pool'):
         first_pool = max_pool_n(first_conv, DOWNSAMPLE_SIZE)
 
+    # Second convolutional layer
+    with tf.name_scope('second_conv'):
+        W_conv2 = weight_variable([KERNEL_SIZE, KERNEL_SIZE, 32, 64])
+        b_conv2 = bias_variable([64])
+        h_conv2 = tf.nn.relu(convolutional_2d_nn(first_pool, W_conv2) + b_conv2)
+
+    # Second pooling layer.
+    with tf.name_scope('second_pool'):
+        second_pool = max_pool_n(h_conv2, DOWNSAMPLE_SIZE)
+
     # First dense layer
     with tf.name_scope('first_dense'):
         # first_pool_batch = first_pool.get_shape()[0]
         print(first_pool.get_shape())
-        first_pool_width = tf.cast(first_pool.get_shape()[1], tf.int32)
-        first_pool_height = tf.cast(first_pool.get_shape()[2], tf.int32)
-        first_pool_channel = tf.cast(first_pool.get_shape()[3], tf.int32)
+        second_pool_width = tf.cast(second_pool.get_shape()[1], tf.int32)
+        second_pool_height = tf.cast(second_pool.get_shape()[2], tf.int32)
+        second_pool_channel = tf.cast(second_pool.get_shape()[3], tf.int32)
 
         # first_pool_width*first_pool_height*first_pool_channel
         # w_dense = weight_variable([914*653*32, DENSE_NEURON_NUM])
-        w_dense = weight_variable([135 * 180 * 32, DENSE_NEURON_NUM])
+        w_dense = weight_variable([70 * 90 * 64, DENSE_NEURON_NUM])
         b_dense = bias_variable([DENSE_NEURON_NUM])
-        pool_flat = tf.reshape(first_pool, [-1,first_pool_width*first_pool_height*first_pool_channel])
+        pool_flat = tf.reshape(second_pool, [-1, second_pool_width * second_pool_height * second_pool_channel])
         dense = tf.nn.relu(tf.matmul(pool_flat,w_dense)+b_dense)
 
     # Dropout
